@@ -18,19 +18,15 @@ public class Expense {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
     private String title;
-
-    @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal amount;
 
-    @Column(nullable = false)
-    private Instant creationTime;
+    @Column(nullable = false, updatable = false)
+    private Instant creationTime = Instant.now();
 
     public Expense( String title, BigDecimal amount) {
         this.title = title;
         this.amount = amount;
-        this.creationTime = Instant.now();
     }
 
 }
