@@ -17,11 +17,11 @@ public class Category {
     private Long id;
 
     private String name;
-    private boolean custom;
+    private boolean defaultCategory;
 
-    public Category(String name, boolean custom){
+    public Category(String name, boolean defaultCategory){
         this.name = name;
-        this.custom = custom;
+        this.defaultCategory = defaultCategory;
     }
 
 }
