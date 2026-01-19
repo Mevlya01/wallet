@@ -24,9 +24,14 @@ public class Expense {
     @Column(name = "creation_time", nullable = false, updatable = false)
     private Instant creationTime = Instant.now();
 
-    public Expense( String title, BigDecimal amount) {
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "category_id")
+    private Category category;
+
+    public Expense( String title, BigDecimal amount, Category category) {
         this.title = title;
         this.amount = amount;
+        this.category = category;
     }
 
 }

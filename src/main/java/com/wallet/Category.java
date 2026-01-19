@@ -19,9 +19,9 @@ public class Category {
     private String name;
 
     @Column(name = "default_category")
-    private boolean defaultCategory;
+    private Boolean defaultCategory;
 
-    public Category(String name, boolean defaultCategory){
+    public Category(String name, Boolean defaultCategory){
         this.name = name;
         this.defaultCategory = defaultCategory;
     }
