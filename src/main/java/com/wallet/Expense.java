@@ -21,7 +21,7 @@ public class Expense {
     private String title;
     private BigDecimal amount;
 
-    @Column(nullable = false, updatable = false)
+    @Column(name = "creation_time", nullable = false, updatable = false)
     private Instant creationTime = Instant.now();
 
     public Expense( String title, BigDecimal amount) {
