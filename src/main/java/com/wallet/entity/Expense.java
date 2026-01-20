@@ -1,4 +1,4 @@
-package com.wallet;
+package com.wallet.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

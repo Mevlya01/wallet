@@ -1,7 +1,7 @@
 package com.wallet.controller;
 
-import com.wallet.Category;
-import com.wallet.CategoryRepository;
+import com.wallet.entity.Category;
+import com.wallet.repository.CategoryRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

@@ -1,5 +1,6 @@
-package com.wallet;
+package com.wallet.repository;
 
+import com.wallet.entity.Expense;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ExpenseRepository extends JpaRepository<Expense,Long> {

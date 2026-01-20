@@ -1,4 +1,7 @@
-package com.wallet;
+package com.wallet.service;
+
+import com.wallet.entity.Expense;
+import com.wallet.repository.ExpenseRepository;
 
 import java.time.Instant;
 
