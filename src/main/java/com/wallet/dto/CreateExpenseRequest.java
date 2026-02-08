@@ -10,5 +10,5 @@ import java.math.BigDecimal;
 public class CreateExpenseRequest {
     private String title;
     private BigDecimal amount;
-    private Long categoryId;
+    private String categoryName;
 }

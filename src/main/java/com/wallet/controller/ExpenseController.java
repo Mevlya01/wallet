@@ -23,7 +23,7 @@ public class ExpenseController {
 @PostMapping
 public ResponseEntity<Expense> createExpense(@RequestBody CreateExpenseRequest request){
 
-    Category category = categoryRepository.findById(request.getCategoryId())
+    Category category = categoryRepository.findByName(request.getCategoryName())
                     .orElseThrow(() -> new RuntimeException("Category not found"));
 
     Expense expense = new Expense(
