@@ -1,5 +1,6 @@
 package com.wallet.controller;
 
+import com.wallet.dto.CreateCategoryRequest;
 import com.wallet.entity.Category;
 import com.wallet.service.CategoryService;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +18,8 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @PostMapping
-    public ResponseEntity<Category> createCategory(@RequestBody Category category){
-        Category savedCategory = categoryService.createCategory(category);
+    public ResponseEntity<Category> createCategory(@RequestBody CreateCategoryRequest request){
+        Category savedCategory = categoryService.createCategory(request);
         return ResponseEntity.ok(savedCategory);
     }
 }

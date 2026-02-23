@@ -1,6 +1,6 @@
 package com.wallet.service;
 
-import com.wallet.controller.CategoryController;
+import com.wallet.dto.CreateCategoryRequest;
 import com.wallet.entity.Category;
 import com.wallet.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,8 +12,8 @@ public class CategoryService {
 
     private final CategoryRepository categoryRepository;
 
-    public Category createCategory(Category category){
-        category.setDefaultCategory(false);
+    public Category createCategory(CreateCategoryRequest request){
+        Category category = new Category(request.getName(), false);
         return categoryRepository.save(category);
     }
 
