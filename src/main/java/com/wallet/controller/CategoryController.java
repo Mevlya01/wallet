@@ -1,7 +1,8 @@
 package com.wallet.controller;
 
 import com.wallet.entity.Category;
-import com.wallet.repository.CategoryRepository;
+import com.wallet.service.CategoryService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -10,17 +11,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/category")
+@RequiredArgsConstructor
 public class CategoryController {
-    private final CategoryRepository categoryRepository;
 
-  public CategoryController(CategoryRepository categoryRepository){
-      this.categoryRepository = categoryRepository;
-  }
+    private CategoryService categoryService;
 
     @PostMapping
     public ResponseEntity<Category> createCategory(@RequestBody Category category){
-        category.setDefaultCategory(false);
-        Category savedCategory = categoryRepository.save(category);
+        Category savedCategory = categoryService.createCategory(category);
         return ResponseEntity.ok(savedCategory);
     }
 }
