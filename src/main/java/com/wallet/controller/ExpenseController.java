@@ -7,12 +7,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/expense")
 @RequiredArgsConstructor
 public class ExpenseController {
 
-   private ExpenseService expenseService;
+   private final ExpenseService expenseService;
 
 @PostMapping
 public ResponseEntity<Expense> createExpense(@RequestBody CreateExpenseRequest request){
@@ -21,6 +23,12 @@ public ResponseEntity<Expense> createExpense(@RequestBody CreateExpenseRequest r
     return ResponseEntity.ok(savedExpense);
 }
 
+
+@GetMapping
+public ResponseEntity<List<Expense>> getAllExpenses(){
+    List<Expense> expenseList = expenseService.getAllExpenses();
+    return ResponseEntity.ok(expenseList);
+}
 
 
 

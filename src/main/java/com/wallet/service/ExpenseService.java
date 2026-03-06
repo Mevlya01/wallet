@@ -5,18 +5,17 @@ import com.wallet.entity.Category;
 import com.wallet.entity.Expense;
 import com.wallet.repository.CategoryRepository;
 import com.wallet.repository.ExpenseRepository;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class ExpenseService {
 
-    private ExpenseRepository expenseRepository;
-    private CategoryRepository categoryRepository;
+    private final ExpenseRepository expenseRepository;
+    private final CategoryRepository categoryRepository;
 
     public Expense createExpense(CreateExpenseRequest request){
 
@@ -33,4 +32,11 @@ public class ExpenseService {
 
         return expenseRepository.save(expense);
     }
+
+    public List<Expense> getAllExpenses(){
+
+        return expenseRepository.findAll();
+    }
+
+
 }
