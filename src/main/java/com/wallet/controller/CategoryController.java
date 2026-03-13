@@ -1,25 +1,32 @@
 package com.wallet.controller;
 
+import com.mysql.cj.x.protobuf.Mysqlx;
 import com.wallet.dto.CreateCategoryRequest;
 import com.wallet.entity.Category;
 import com.wallet.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/category")
 @RequiredArgsConstructor
 public class CategoryController {
 
-    private CategoryService categoryService;
+    private final CategoryService categoryService;
 
     @PostMapping
     public ResponseEntity<Category> createCategory(@RequestBody CreateCategoryRequest request){
         Category savedCategory = categoryService.createCategory(request);
         return ResponseEntity.ok(savedCategory);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Category>> getAllCategories(){
+        List<Category> categoryList = categoryService.getAllCategories();
+        return ResponseEntity.ok(categoryList);
+
     }
 }
