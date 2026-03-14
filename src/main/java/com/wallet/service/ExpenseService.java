@@ -38,5 +38,23 @@ public class ExpenseService {
         return expenseRepository.findAll();
     }
 
+    public Expense updateExpense(Long id,CreateExpenseRequest request){
+
+        Expense currentExpense = expenseRepository.findById(id).
+                orElseThrow(() -> new IllegalArgumentException(
+                        "Expense not found : " + id ));
+
+        Category currentCategory = categoryRepository.
+                findByName(request.getCategoryName()).orElseThrow(
+                        () -> new IllegalArgumentException(
+                                "Category not found: " + request.getCategoryName()));
+
+        currentExpense.setTitle(request.getTitle());
+        currentExpense.setCategory(currentCategory);
+        currentExpense.setAmount(request.getAmount());
+
+        return expenseRepository.save(currentExpense);
+
+    }
 
 }

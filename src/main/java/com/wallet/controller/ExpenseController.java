@@ -31,6 +31,11 @@ public ResponseEntity<List<Expense>> getAllExpenses(){
 }
 
 
+@PutMapping("/{id}")
+public ResponseEntity<Expense> updateExpense(@PathVariable Long id,
+                                             @RequestBody CreateExpenseRequest request){
 
-
+    Expense updatedExpense = expenseService.updateExpense(id, request);
+    return  ResponseEntity.ok(updatedExpense);
+}
 }
