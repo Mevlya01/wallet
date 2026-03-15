@@ -22,4 +22,13 @@ public class CategoryService {
     public List<Category> getAllCategories(){
         return categoryRepository.findAll();
     }
+
+    public Category updateCategory(String name, CreateCategoryRequest request){
+        Category category = categoryRepository.findByName(name).
+                orElseThrow(() -> new IllegalArgumentException(
+                        "Category not found : " + name ));
+
+        category.setName(request.getName());
+        return categoryRepository.save(category);
+    }
 }

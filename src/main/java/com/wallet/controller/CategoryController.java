@@ -3,6 +3,7 @@ package com.wallet.controller;
 import com.mysql.cj.x.protobuf.Mysqlx;
 import com.wallet.dto.CreateCategoryRequest;
 import com.wallet.entity.Category;
+import com.wallet.repository.CategoryRepository;
 import com.wallet.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -28,5 +29,12 @@ public class CategoryController {
         List<Category> categoryList = categoryService.getAllCategories();
         return ResponseEntity.ok(categoryList);
 
+    }
+
+    @PutMapping("/{name}")
+    public ResponseEntity<Category> updateCategory(@PathVariable String name,
+                                                   @RequestBody CreateCategoryRequest request){
+        Category category = categoryService.updateCategory(name,request);
+        return ResponseEntity.ok(category);
     }
 }
