@@ -1,6 +1,7 @@
 package com.wallet.service;
 
 import com.wallet.dto.CreateExpenseRequest;
+import com.wallet.dto.PatchExpenseRequest;
 import com.wallet.entity.Category;
 import com.wallet.entity.Expense;
 import com.wallet.repository.CategoryRepository;
@@ -40,21 +41,44 @@ public class ExpenseService {
 
     public Expense updateExpense(Long id,CreateExpenseRequest request){
 
-        Expense currentExpense = expenseRepository.findById(id).
+        Expense expense = expenseRepository.findById(id).
                 orElseThrow(() -> new IllegalArgumentException(
                         "Expense not found : " + id ));
 
-        Category currentCategory = categoryRepository.
+        Category category = categoryRepository.
                 findByName(request.getCategoryName()).orElseThrow(
                         () -> new IllegalArgumentException(
                                 "Category not found: " + request.getCategoryName()));
 
-        currentExpense.setTitle(request.getTitle());
-        currentExpense.setCategory(currentCategory);
-        currentExpense.setAmount(request.getAmount());
+        expense.setTitle(request.getTitle());
+        expense.setCategory(category);
+        expense.setAmount(request.getAmount());
 
-        return expenseRepository.save(currentExpense);
+        return expenseRepository.save(expense);
 
     }
 
+    public Expense patchExpense(Long id, PatchExpenseRequest request){
+        Expense expense = expenseRepository.findById(id).
+                orElseThrow(() -> new IllegalArgumentException(
+                        "Expense not found : " + id ));
+
+
+        if(request.getTitle() != null ){
+           expense.setTitle(request.getTitle());
+        }
+        if(request.getAmount() != null){
+            expense.setAmount(request.getAmount());
+        }
+        if(request.getCategoryName() != null){
+            Category category = categoryRepository
+                    .findByName(request.getCategoryName())
+                    .orElseThrow(() -> new IllegalArgumentException(
+                            "Category not found: " + request.getCategoryName()));
+
+            expense.setCategory(category);
+        }
+
+        return expenseRepository.save(expense);
+    }
 }

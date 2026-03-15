@@ -1,5 +1,6 @@
 package com.wallet.controller;
 
+import com.wallet.dto.PatchExpenseRequest;
 import com.wallet.entity.Expense;
 import com.wallet.dto.CreateExpenseRequest;
 import com.wallet.service.ExpenseService;
@@ -37,5 +38,12 @@ public ResponseEntity<Expense> updateExpense(@PathVariable Long id,
 
     Expense updatedExpense = expenseService.updateExpense(id, request);
     return  ResponseEntity.ok(updatedExpense);
+}
+
+@PatchMapping("/{id}")
+public ResponseEntity<Expense> patchExpense(@PathVariable Long id,
+                                            @RequestBody PatchExpenseRequest request){
+    Expense updatedExpense = expenseService.patchExpense(id,request);
+    return ResponseEntity.ok(updatedExpense);
 }
 }
