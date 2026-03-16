@@ -28,6 +28,10 @@ public class CategoryService {
                 orElseThrow(() -> new IllegalArgumentException(
                         "Category not found : " + name ));
 
+        if(category.getDefaultCategory() == true){
+            throw new IllegalArgumentException("Cannot update default categories.");
+        }
+
         category.setName(request.getName());
         return categoryRepository.save(category);
     }
