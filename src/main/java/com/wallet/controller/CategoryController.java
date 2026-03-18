@@ -1,9 +1,7 @@
 package com.wallet.controller;
 
-import com.mysql.cj.x.protobuf.Mysqlx;
 import com.wallet.dto.CreateCategoryRequest;
 import com.wallet.entity.Category;
-import com.wallet.repository.CategoryRepository;
 import com.wallet.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
