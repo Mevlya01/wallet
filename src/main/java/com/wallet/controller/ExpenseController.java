@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -46,4 +47,11 @@ public ResponseEntity<Expense> patchExpense(@PathVariable Long id,
     Expense updatedExpense = expenseService.patchExpense(id,request);
     return ResponseEntity.ok(updatedExpense);
 }
+
+@GetMapping("/{total}")
+public ResponseEntity<BigDecimal> getTotalExpenses(){
+    return ResponseEntity.ok(expenseService.getTotalExpenses());
+}
+
+
 }

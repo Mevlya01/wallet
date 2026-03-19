@@ -9,6 +9,7 @@ import com.wallet.repository.ExpenseRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -80,5 +81,9 @@ public class ExpenseService {
         }
 
         return expenseRepository.save(expense);
+    }
+
+    public BigDecimal getTotalExpenses(){
+        return expenseRepository.getTotalExpenseAmount();
     }
 }
