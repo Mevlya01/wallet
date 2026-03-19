@@ -86,4 +86,11 @@ public class ExpenseService {
     public BigDecimal getTotalExpenses(){
         return expenseRepository.getTotalExpenseAmount();
     }
+
+    public BigDecimal getTotalExpensesByCategory(String categoryName){
+       Category category = categoryRepository.findByName(categoryName).
+               orElseThrow(() -> new IllegalArgumentException(
+                "Category not found : " + categoryName ));
+        return expenseRepository.getTotalExpenseByCategory(category.getId());
+    }
 }

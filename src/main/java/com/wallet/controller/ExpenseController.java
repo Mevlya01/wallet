@@ -53,5 +53,9 @@ public ResponseEntity<BigDecimal> getTotalExpenses(){
     return ResponseEntity.ok(expenseService.getTotalExpenses());
 }
 
+@GetMapping("/total/{name}")
+    public ResponseEntity<BigDecimal> getTotalExpensesByCategory(@PathVariable String name){
+    return ResponseEntity.ok(expenseService.getTotalExpensesByCategory(name));
+}
 
 }
