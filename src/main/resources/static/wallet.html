@@ -143,9 +143,18 @@
     } catch { alert('Failed to add category.'); }
   }
 
+  async function fetchTotal() {
+    try {
+      const r = await fetch(`${BASE}/expense/total`);
+      const total = await r.json();
+      document.getElementById('total').textContent = parseFloat(total).toFixed(2);
+    } catch {
+      document.getElementById('total').textContent = '—';
+    }
+  }
+
   function renderExpenses() {
-    const total = expenses.reduce((s, e) => s + parseFloat(e.amount || 0), 0);
-    document.getElementById('total').textContent = total.toFixed(2);
+    fetchTotal();
     document.getElementById('expTable').innerHTML = expenses.length
       ? expenses.map(e => `<tr>
           <td>${e.title}</td>

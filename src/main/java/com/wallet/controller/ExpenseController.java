@@ -48,7 +48,7 @@ public ResponseEntity<Expense> patchExpense(@PathVariable Long id,
     return ResponseEntity.ok(updatedExpense);
 }
 
-@GetMapping("/{total}")
+@GetMapping("/total")
 public ResponseEntity<BigDecimal> getTotalExpenses(){
     return ResponseEntity.ok(expenseService.getTotalExpenses());
 }
