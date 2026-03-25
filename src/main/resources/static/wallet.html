@@ -14,8 +14,16 @@
       background: #2e7d32; color: white;
       padding: 1rem 1.5rem; border-radius: 8px;
       font-size: 1.3rem; font-weight: bold;
-      margin-bottom: 2rem; display: inline-block;
+      margin-bottom: 1rem; display: inline-block;
     }
+
+    .cat-total-row { display: flex; gap: .6rem; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; }
+    .cat-total-box {
+      background: white; border: 1px solid #ccc; border-radius: 8px;
+      padding: .6rem 1rem; font-size: .95rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,.08);
+    }
+    .cat-total-box span { font-weight: bold; color: #2e7d32; }
 
     .card {
       background: white; border-radius: 8px;
@@ -64,6 +72,8 @@
 <h1>💰 Wallet</h1>
 
 <div class="total">Total Spent: $<span id="total">0.00</span></div>
+
+<div class="cat-total-row" id="catTotals"></div>
 
 <!-- Add Expense -->
 <div class="card">
@@ -143,6 +153,24 @@
     } catch { alert('Failed to add category.'); }
   }
 
+  async function fetchCategoryTotals() {
+    const container = document.getElementById('catTotals');
+    if (!categories.length) { container.innerHTML = ''; return; }
+    const results = await Promise.all(
+      categories.map(async c => {
+        try {
+          const r = await fetch(`${BASE}/expense/total/${encodeURIComponent(c.name)}`);
+          const val = await r.json();
+          return { name: c.name, total: parseFloat(val || 0) };
+        } catch { return { name: c.name, total: 0 }; }
+      })
+    );
+    container.innerHTML = results
+      .filter(r => r.total > 0)
+      .map(r => `<div class="cat-total-box">${r.name}: <span>$${r.total.toFixed(2)}</span></div>`)
+      .join('') || '';
+  }
+
   async function fetchTotal() {
     try {
       const r = await fetch(`${BASE}/expense/total`);
@@ -155,6 +183,7 @@
 
   function renderExpenses() {
     fetchTotal();
+    fetchCategoryTotals();
     document.getElementById('expTable').innerHTML = expenses.length
       ? expenses.map(e => `<tr>
           <td>${e.title}</td>
