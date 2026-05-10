@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -34,5 +35,19 @@ public class CategoryService {
 
         category.setName(request.getName());
         return categoryRepository.save(category);
+    }
+
+    public void deleteCategory(String name){
+
+        Category category = categoryRepository.findByName(name).orElseThrow(
+                () -> new NoSuchElementException( "Category not found : " + name));
+
+        if (category.getDefaultCategory()){
+            throw new IllegalArgumentException("Cannot delete default categories.");
+        }
+
+        categoryRepository.delete(category);
+
+
     }
 }
