@@ -3,6 +3,7 @@ package com.wallet.service;
 import com.wallet.dto.CreateCategoryRequest;
 import com.wallet.entity.Category;
 import com.wallet.repository.CategoryRepository;
+import com.wallet.repository.ExpenseRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,7 @@ import java.util.NoSuchElementException;
 public class CategoryService {
 
     private final CategoryRepository categoryRepository;
+    private final ExpenseRepository expenseRepository;
 
     public Category createCategory(CreateCategoryRequest request){
         Category category = new Category(request.getName(), false);
@@ -44,6 +46,13 @@ public class CategoryService {
 
         if (category.getDefaultCategory()){
             throw new IllegalArgumentException("Cannot delete default categories.");
+        }
+
+        boolean hasExpenseRecord = expenseRepository.existsByCategoryId(category.getId());
+
+        if(hasExpenseRecord){
+            throw new IllegalStateException(
+                    "Cannot delete a category with expense records.");
         }
 
         categoryRepository.delete(category);

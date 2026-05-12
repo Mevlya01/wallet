@@ -12,6 +12,8 @@ import java.util.Optional;
 @Repository
 public interface ExpenseRepository extends JpaRepository<Expense,Long> {
 
+    boolean existsByCategoryId(Long categoryId);
+
     @Query("SELECT COALESCE(SUM(e.amount), 0) FROM Expense e")
     BigDecimal getTotalExpenseAmount();
 
