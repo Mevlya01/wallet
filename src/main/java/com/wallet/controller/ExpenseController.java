@@ -58,5 +58,9 @@ public ResponseEntity<BigDecimal> getTotalExpenses(){
     return ResponseEntity.ok(expenseService.getTotalExpensesByCategory(name));
 }
 
-
+@DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteExpense(@PathVariable Long id){
+    expenseService.deleteExpense(id);
+    return ResponseEntity.ok("Expense deleted!");
+}
 }
