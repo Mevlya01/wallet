@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -94,4 +95,12 @@ ExpenseService {
                 "Category not found : " + categoryName ));
         return expenseRepository.getTotalExpenseByCategory(category.getId());
     }
+
+    public void deleteExpense(Long id){
+        Expense expense = expenseRepository.findById(id).orElseThrow(
+                ()  ->  new IllegalArgumentException("Expense not found : " + id ));
+
+        expenseRepository.delete(expense);
+    }
+
 }

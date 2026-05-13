@@ -58,4 +58,5 @@ public ResponseEntity<BigDecimal> getTotalExpenses(){
     return ResponseEntity.ok(expenseService.getTotalExpensesByCategory(name));
 }
 
+
 }
