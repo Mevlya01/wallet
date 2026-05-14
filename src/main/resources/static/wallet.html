@@ -6,140 +6,255 @@
   <title>Wallet</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: sans-serif; background: #f4f4f4; padding: 2rem; color: #222; }
 
-    h1 { margin-bottom: 1.5rem; color: #2e7d32; }
-
-    .nav { display: flex; gap: .5rem; margin-bottom: 1.5rem; }
-    .nav button {
-      background: white; border: 1px solid #ccc; color: #555;
-      padding: .5rem 1.2rem; border-radius: 5px;
-      cursor: pointer; font-size: .95rem;
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f0f2f5;
+      color: #1a1a2e;
+      min-height: 100vh;
     }
-    .nav button:hover { border-color: #2e7d32; color: #2e7d32; }
-    .nav button.active { background: #2e7d32; color: white; border-color: #2e7d32; }
+
+    /* ── HEADER ── */
+    header {
+      background: #2e7d32;
+      color: white;
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 8px rgba(0,0,0,.15);
+    }
+    header h1 { font-size: 1.3rem; letter-spacing: .5px; }
+
+    nav { display: flex; gap: .4rem; }
+    nav button {
+      background: rgba(255,255,255,.15);
+      border: 1px solid rgba(255,255,255,.3);
+      color: white; padding: .45rem 1.1rem;
+      border-radius: 6px; cursor: pointer;
+      font-size: .88rem; transition: all .2s;
+    }
+    nav button:hover { background: rgba(255,255,255,.25); }
+    nav button.active { background: white; color: #2e7d32; font-weight: 600; }
+
+    /* ── LAYOUT ── */
+    main { max-width: 900px; margin: 2rem auto; padding: 0 1.5rem; }
 
     .section { display: none; }
-    .section.active { display: block; }
+    .section.active { display: block; animation: fadeIn .2s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; } }
 
-    .total {
-      background: #2e7d32; color: white;
-      padding: 1rem 1.5rem; border-radius: 8px;
-      font-size: 1.3rem; font-weight: bold;
-      margin-bottom: 1rem; display: inline-block;
+    /* ── STAT CARDS ── */
+    .stats-row { display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+    .stat-card {
+      background: white; border-radius: 10px;
+      padding: 1.2rem 1.5rem; flex: 1; min-width: 140px;
+      box-shadow: 0 1px 4px rgba(0,0,0,.08);
+      border-left: 4px solid #2e7d32;
     }
+    .stat-card p { font-size: .75rem; color: #888; text-transform: uppercase; letter-spacing: .5px; margin-bottom: .3rem; }
+    .stat-card strong { font-size: 1.6rem; color: #2e7d32; }
 
-    .cat-total-row { display: flex; gap: .6rem; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; }
+    .cat-total-row { display: flex; gap: .6rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
     .cat-total-box {
-      background: white; border: 1px solid #ccc; border-radius: 8px;
-      padding: .6rem 1rem; font-size: .95rem;
-      box-shadow: 0 1px 3px rgba(0,0,0,.08);
-    }
-    .cat-total-box span { font-weight: bold; color: #2e7d32; }
-
-    .card {
       background: white; border-radius: 8px;
+      padding: .5rem 1rem; font-size: .88rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,.07);
+      border: 1px solid #e0e0e0;
+      color: #555;
+    }
+    .cat-total-box span { font-weight: 700; color: #2e7d32; }
+
+    /* ── CARD ── */
+    .card {
+      background: white; border-radius: 10px;
       padding: 1.5rem; margin-bottom: 1.5rem;
-      box-shadow: 0 1px 4px rgba(0,0,0,.1); max-width: 600px;
+      box-shadow: 0 1px 4px rgba(0,0,0,.08);
     }
-    .card h2 { margin-bottom: 1rem; font-size: 1rem; color: #555; }
+    .card h2 {
+      font-size: .8rem; text-transform: uppercase;
+      letter-spacing: 1px; color: #aaa;
+      margin-bottom: 1rem; font-weight: 600;
+    }
 
-    .form-row { display: flex; gap: .6rem; flex-wrap: wrap; }
+    /* ── FORM ── */
+    .form-row { display: flex; gap: .6rem; flex-wrap: wrap; align-items: center; }
     input, select {
-      padding: .5rem .7rem; border: 1px solid #ccc;
-      border-radius: 5px; font-size: .95rem; flex: 1; min-width: 100px;
+      padding: .55rem .8rem; border: 1px solid #ddd;
+      border-radius: 7px; font-size: .92rem;
+      flex: 1; min-width: 120px; outline: none;
+      background: #fafafa; transition: border-color .2s;
+      font-family: inherit;
     }
-    input:focus, select:focus { outline: none; border-color: #2e7d32; }
-    button {
+    input:focus, select:focus { border-color: #2e7d32; background: white; }
+
+    button.btn {
       background: #2e7d32; color: white; border: none;
-      padding: .5rem 1.2rem; border-radius: 5px;
-      cursor: pointer; font-size: .95rem;
+      padding: .55rem 1.3rem; border-radius: 7px;
+      cursor: pointer; font-size: .92rem;
+      font-family: inherit; transition: background .2s;
+      white-space: nowrap;
     }
-    button:hover { background: #1b5e20; }
+    button.btn:hover { background: #1b5e20; }
+    button.btn.secondary { background: #888; }
+    button.btn.secondary:hover { background: #666; }
 
-    table { width: 100%; border-collapse: collapse; max-width: 600px; }
-    th, td { padding: .65rem 1rem; text-align: left; border-bottom: 1px solid #eee; font-size: .92rem; }
-    th { color: #888; font-size: .8rem; text-transform: uppercase; }
-    .amount { color: #2e7d32; font-weight: bold; }
-    .empty { text-align: center; color: #aaa; padding: 1.5rem; }
+    /* ── TABLE ── */
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; }
+    th {
+      padding: .6rem 1rem; text-align: left;
+      font-size: .72rem; text-transform: uppercase;
+      letter-spacing: .8px; color: #aaa; font-weight: 600;
+      border-bottom: 2px solid #f0f0f0;
+    }
+    td { padding: .75rem 1rem; font-size: .92rem; border-bottom: 1px solid #f5f5f5; }
+    tbody tr:hover { background: #fafafa; }
+    .amount { color: #2e7d32; font-weight: 700; }
+    .cat-badge {
+      background: #e8f5e9; color: #2e7d32;
+      padding: .2rem .6rem; border-radius: 20px;
+      font-size: .78rem; font-weight: 600;
+    }
+    .empty { text-align: center; color: #bbb; padding: 2rem !important; font-size: .9rem; }
 
+    .btn-action {
+      border: none; padding: .28rem .7rem; border-radius: 5px;
+      cursor: pointer; font-size: .8rem; font-family: inherit;
+      margin-right: .3rem; transition: opacity .2s;
+    }
+    .btn-action.edit { background: #e3f2fd; color: #1565c0; }
+    .btn-action.edit:hover { background: #bbdefb; }
+    .btn-action.del { background: #ffebee; color: #c62828; }
+    .btn-action.del:hover { background: #ffcdd2; }
+
+    /* ── FILTER ── */
+    .filter-row {
+      display: flex; align-items: center; gap: .8rem;
+      margin-bottom: 1.2rem;
+    }
+    .filter-row label { font-size: .8rem; color: #888; white-space: nowrap; }
+    .filter-row select { max-width: 200px; flex: none; }
+
+    /* ── MODAL ── */
     .overlay {
       display: none; position: fixed; inset: 0;
-      background: rgba(0,0,0,.4); z-index: 100;
+      background: rgba(0,0,0,.35); z-index: 100;
       align-items: center; justify-content: center;
+      backdrop-filter: blur(2px);
     }
     .overlay.open { display: flex; }
     .modal {
-      background: white; border-radius: 8px;
-      padding: 1.5rem; width: 340px; max-width: 95vw;
+      background: white; border-radius: 12px;
+      padding: 1.8rem; width: 360px; max-width: 95vw;
+      box-shadow: 0 8px 30px rgba(0,0,0,.15);
     }
-    .modal h3 { margin-bottom: 1rem; font-size: 1rem; color: #555; }
+    .modal h3 { margin-bottom: 1.2rem; font-size: 1rem; color: #333; }
     .modal-row { display: flex; gap: .6rem; }
-    .btn-cancel { background: #888; }
-    .btn-cancel:hover { background: #666; }
   </style>
 </head>
 <body>
 
-<h1>💰 Wallet</h1>
+<header>
+  <h1>💰 Wallet</h1>
+  <nav>
+    <button class="active" onclick="showSection('home', this)">Home</button>
+    <button onclick="showSection('transactions', this)">Transactions</button>
+    <button onclick="showSection('categories', this)">Categories</button>
+  </nav>
+</header>
 
-<div class="nav">
-  <button class="active" onclick="showSection('home', this)">Home</button>
-  <button onclick="showSection('transactions', this)">Transactions</button>
-  <button onclick="showSection('categories', this)">Categories</button>
-</div>
+<main>
 
-<!-- HOME SECTION -->
-<div class="section active" id="section-home">
-  <div class="total">Total Spent: $<span id="total">0.00</span></div>
-  <div class="cat-total-row" id="catTotals"></div>
+  <!-- HOME -->
+  <div class="section active" id="section-home">
+    <div class="stats-row">
+      <div class="stat-card">
+        <p>Total Spent</p>
+        <strong>$<span id="total">0.00</span></strong>
+      </div>
+    </div>
+    <div class="cat-total-row" id="catTotals"></div>
 
-  <div class="card">
-    <h2>Add Expense</h2>
-    <div class="form-row">
-      <input id="expTitle" placeholder="Title"/>
-      <input id="expAmount" type="number" step="0.01" placeholder="Amount"/>
-      <select id="expCategory"><option value="" data-name="">Category</option></select>
-      <button onclick="createExpense()">Add</button>
+    <div class="card">
+      <h2>Add Expense</h2>
+      <div class="form-row">
+        <input id="expTitle" placeholder="Title"/>
+        <input id="expAmount" type="number" step="0.01" placeholder="Amount"/>
+        <select id="expCategory"><option value="">Select category</option></select>
+        <button class="btn" onclick="createExpense()">Add Expense</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TRANSACTIONS -->
+  <div class="section" id="section-transactions">
+    <div class="card">
+      <h2>All Transactions</h2>
+      <div class="filter-row">
+        <label>Filter by category:</label>
+        <select id="filterCategory" onchange="renderExpenses()">
+          <option value="">All Categories</option>
+        </select>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Title</th><th>Amount</th><th>Category</th><th>Actions</th></tr></thead>
+          <tbody id="expTable"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- CATEGORIES -->
+  <div class="section" id="section-categories">
+    <div class="card">
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1rem;">
+        <h2 style="margin-bottom:0">All Categories</h2>
+        <button class="btn" onclick="toggleAddCategory()">+ New Category</button>
+      </div>
+      <div id="addCatForm" style="display:none; margin-bottom:1.2rem; padding:1rem; background:#f9f9f9; border-radius:8px; border:1px solid #eee;">
+        <div class="form-row">
+          <input id="catName" placeholder="Category name"/>
+          <button class="btn" onclick="createCategory()">Add</button>
+          <button class="btn secondary" onclick="toggleAddCategory()">Cancel</button>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Name</th></tr></thead>
+          <tbody id="catTable"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- Edit Expense Modal -->
+<div class="overlay" id="editExpModal">
+  <div class="modal">
+    <h3>Edit Expense</h3>
+    <div style="display:flex; flex-direction:column; gap:.8rem;">
+      <input id="editExpTitle" placeholder="Title"/>
+      <input id="editExpAmount" type="number" step="0.01" placeholder="Amount"/>
+      <select id="editExpCategory"></select>
+    </div>
+    <div class="modal-row" style="margin-top:1rem; justify-content:flex-end;">
+      <button class="btn secondary" onclick="closeEditExpModal()">Cancel</button>
+      <button class="btn" onclick="submitPatchExpense()">Save</button>
     </div>
   </div>
 </div>
 
-<!-- TRANSACTIONS SECTION -->
-<div class="section" id="section-transactions">
-  <div class="card" style="max-width:100%">
-    <h2>All Transactions</h2>
-    <div style="margin-bottom:1rem">
-      <select id="filterCategory" onchange="renderExpenses()">
-        <option value="">All Categories</option>
-      </select>
-    </div>
-    <table style="max-width:100%">
-      <thead><tr><th>Title</th><th>Amount</th><th>Category</th></tr></thead>
-      <tbody id="expTable"></tbody>
-    </table>
-  </div>
-</div>
-
-<!-- CATEGORIES SECTION -->
-<div class="section" id="section-categories">
-  <div class="card" style="max-width:100%">
-    <h2>All Categories</h2>
-    <table style="max-width:100%">
-      <thead><tr><th>Name</th></tr></thead>
-      <tbody id="catTable"></tbody>
-    </table>
-  </div>
-</div>
-
-<!-- New Category Modal -->
+<!-- New Category Modal (from dropdown) -->
 <div class="overlay" id="newCatModal">
   <div class="modal">
     <h3>New Category</h3>
     <div class="modal-row">
       <input id="inlineCatName" placeholder="Category name" style="flex:1"/>
-      <button onclick="createCategoryInline()">Add</button>
-      <button class="btn-cancel" onclick="closeNewCatModal()">Cancel</button>
+      <button class="btn" onclick="createCategoryInline()">Add</button>
+      <button class="btn secondary" onclick="closeNewCatModal()">Cancel</button>
     </div>
   </div>
 </div>
@@ -150,7 +265,7 @@
 
   function showSection(id, btn) {
     document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-    document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
     document.getElementById('section-' + id).classList.add('active');
     btn.classList.add('active');
   }
@@ -163,50 +278,44 @@
     renderExpenses();
   }
 
-  function renderCategories() {
-    document.getElementById('catTable').innerHTML = categories.length
-      ? categories.map(c => `<tr><td>${c.name}</td></tr>`).join('')
-      : `<tr><td class="empty" colspan="1">No categories yet.</td></tr>`;
-  }
-
   function renderCategorySelect() {
     const opts = categories.map(c => `<option value="${c.name}">${c.name}</option>`).join('');
     document.getElementById('expCategory').innerHTML =
-      '<option value="">Category</option>' + opts + '<option value="__new__">➕ Add new category</option>';
+      '<option value="">Select category</option>' + opts + '<option value="__new__">➕ Add new category</option>';
     document.getElementById('filterCategory').innerHTML =
       '<option value="">All Categories</option>' + opts;
   }
 
-  document.getElementById('expCategory').addEventListener('change', function() {
-    if (this.value === '__new__') {
-      this.value = '';
-      document.getElementById('newCatModal').classList.add('open');
-      document.getElementById('inlineCatName').focus();
-    }
-  });
-
-  function closeNewCatModal() {
-    document.getElementById('newCatModal').classList.remove('open');
-    document.getElementById('inlineCatName').value = '';
+  function renderCategories() {
+    document.getElementById('catTable').innerHTML = categories.length
+      ? categories.map(c => `<tr><td>${c.name}</td></tr>`).join('')
+      : `<tr><td class="empty">No categories yet.</td></tr>`;
   }
 
-  async function createCategoryInline() {
-    const name = document.getElementById('inlineCatName').value.trim();
-    if (!name) return alert('Enter a category name.');
+  function renderExpenses() {
+    fetchTotal();
+    fetchCategoryTotals();
+    const filter = document.getElementById('filterCategory').value;
+    const filtered = filter ? expenses.filter(e => e.category?.name === filter) : expenses;
+    document.getElementById('expTable').innerHTML = filtered.length
+      ? filtered.map(e => `<tr>
+          <td>${e.title}</td>
+          <td class="amount">$${parseFloat(e.amount).toFixed(2)}</td>
+          <td><span class="cat-badge">${e.category?.name || '—'}</span></td>
+          <td>
+            <button class="btn-action edit" onclick="openEditExpense(${e.id})">Edit</button>
+            <button class="btn-action del" onclick="deleteExpense(${e.id})">Delete</button>
+          </td>
+        </tr>`).join('')
+      : `<tr><td class="empty" colspan="4">No expenses found.</td></tr>`;
+  }
+
+  async function fetchTotal() {
     try {
-      const r = await fetch(`${BASE}/category`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, defaultCategory: false })
-      });
-      if (!r.ok) throw new Error();
-      categories = await (await fetch(`${BASE}/category`)).json();
-      renderCategorySelect();
-      renderCategories();
-      // auto-select the newly created category
-      const newCat = categories.find(c => c.name === name);
-      if (newCat) document.getElementById('expCategory').value = newCat.name;
-      closeNewCatModal();
-    } catch { alert('Failed to add category.'); }
+      const r = await fetch(`${BASE}/expense/total`);
+      const total = await r.json();
+      document.getElementById('total').textContent = parseFloat(total).toFixed(2);
+    } catch { document.getElementById('total').textContent = '—'; }
   }
 
   async function fetchCategoryTotals() {
@@ -224,31 +333,20 @@
     container.innerHTML = results
       .filter(r => r.total > 0)
       .map(r => `<div class="cat-total-box">${r.name}: <span>$${r.total.toFixed(2)}</span></div>`)
-      .join('') || '';
+      .join('');
   }
 
-  async function fetchTotal() {
-    try {
-      const r = await fetch(`${BASE}/expense/total`);
-      const total = await r.json();
-      document.getElementById('total').textContent = parseFloat(total).toFixed(2);
-    } catch {
-      document.getElementById('total').textContent = '—';
+  document.getElementById('expCategory').addEventListener('change', function() {
+    if (this.value === '__new__') {
+      this.value = '';
+      document.getElementById('newCatModal').classList.add('open');
+      document.getElementById('inlineCatName').focus();
     }
-  }
+  });
 
-  function renderExpenses() {
-    fetchTotal();
-    fetchCategoryTotals();
-    const filter = document.getElementById('filterCategory').value;
-    const filtered = filter ? expenses.filter(e => e.category?.name === filter) : expenses;
-    document.getElementById('expTable').innerHTML = filtered.length
-      ? filtered.map(e => `<tr>
-          <td>${e.title}</td>
-          <td class="amount">$${parseFloat(e.amount).toFixed(2)}</td>
-          <td>${e.category?.name || '—'}</td>
-        </tr>`).join('')
-      : `<tr><td class="empty" colspan="3">No expenses found.</td></tr>`;
+  function closeNewCatModal() {
+    document.getElementById('newCatModal').classList.remove('open');
+    document.getElementById('inlineCatName').value = '';
   }
 
   async function createExpense() {
@@ -268,6 +366,92 @@
       document.getElementById('expCategory').value = '';
       renderExpenses();
     } catch { alert('Failed to add expense.'); }
+  }
+
+  function toggleAddCategory() {
+    const form = document.getElementById('addCatForm');
+    form.style.display = form.style.display === 'none' ? 'block' : 'none';
+    if (form.style.display === 'block') document.getElementById('catName').focus();
+  }
+
+  async function createCategory() {
+    const name = document.getElementById('catName').value.trim();
+    if (!name) return alert('Enter a category name.');
+    try {
+      const r = await fetch(`${BASE}/category`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, defaultCategory: false })
+      });
+      if (!r.ok) throw new Error();
+      categories = await (await fetch(`${BASE}/category`)).json();
+      document.getElementById('catName').value = '';
+      document.getElementById('addCatForm').style.display = 'none';
+      renderCategorySelect();
+      renderCategories();
+    } catch { alert('Failed to add category.'); }
+  }
+
+  async function createCategoryInline() {
+    const name = document.getElementById('inlineCatName').value.trim();
+    if (!name) return alert('Enter a category name.');
+    try {
+      const r = await fetch(`${BASE}/category`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, defaultCategory: false })
+      });
+      if (!r.ok) throw new Error();
+      categories = await (await fetch(`${BASE}/category`)).json();
+      renderCategorySelect();
+      renderCategories();
+      const newCat = categories.find(c => c.name === name);
+      if (newCat) document.getElementById('expCategory').value = newCat.name;
+      closeNewCatModal();
+    } catch { alert('Failed to add category.'); }
+  }
+
+  let editingExpenseId = null;
+
+  function openEditExpense(id) {
+    const e = expenses.find(x => x.id === id);
+    if (!e) return;
+    editingExpenseId = id;
+    document.getElementById('editExpTitle').value = e.title;
+    document.getElementById('editExpAmount').value = e.amount;
+    document.getElementById('editExpCategory').innerHTML =
+      categories.map(c => `<option value="${c.name}" ${c.name === e.category?.name ? 'selected' : ''}>${c.name}</option>`).join('');
+    document.getElementById('editExpModal').classList.add('open');
+  }
+
+  function closeEditExpModal() {
+    document.getElementById('editExpModal').classList.remove('open');
+    editingExpenseId = null;
+  }
+
+  async function submitPatchExpense() {
+    const title = document.getElementById('editExpTitle').value.trim();
+    const amount = document.getElementById('editExpAmount').value;
+    const categoryName = document.getElementById('editExpCategory').value;
+    if (!title || !amount) return alert('Fill in all fields.');
+    try {
+      const r = await fetch(`${BASE}/expense/${editingExpenseId}`, {
+        method: 'PATCH', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title, amount: parseFloat(amount), categoryName })
+      });
+      if (!r.ok) throw new Error();
+      expenses = await (await fetch(`${BASE}/expense`)).json();
+      closeEditExpModal();
+      renderExpenses();
+    } catch { alert('Failed to update expense.'); }
+  }
+
+  async function deleteExpense(id) {
+    if (!confirm('Delete this expense?')) return;
+    try {
+      const r = await fetch(`${BASE}/expense/${id}`, { method: 'DELETE' });
+      if (!r.ok) throw new Error();
+      expenses = await (await fetch(`${BASE}/expense`)).json();
+      renderExpenses();
+    } catch { alert('Failed to delete expense.'); }
   }
 
   init();
