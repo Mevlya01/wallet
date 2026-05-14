@@ -8,7 +8,6 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 public class CreateExpenseRequest {
-    private String title;
     private BigDecimal amount;
     private String categoryName;
 }

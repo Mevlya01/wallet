@@ -28,7 +28,6 @@ ExpenseService {
                 ));
 
         Expense expense = new Expense(
-                request.getTitle(),
                 request.getAmount(),
                 category
         );
@@ -52,7 +51,6 @@ ExpenseService {
                         () -> new IllegalArgumentException(
                                 "Category not found: " + request.getCategoryName()));
 
-        expense.setTitle(request.getTitle());
         expense.setCategory(category);
         expense.setAmount(request.getAmount());
 
@@ -66,9 +64,6 @@ ExpenseService {
                         "Expense not found : " + id ));
 
 
-        if(request.getTitle() != null ){
-           expense.setTitle(request.getTitle());
-        }
         if(request.getAmount() != null){
             expense.setAmount(request.getAmount());
         }

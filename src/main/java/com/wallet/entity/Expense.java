@@ -20,7 +20,6 @@ public class Expense {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String title;
     private BigDecimal amount;
 
     @Column(name = "creation_time", nullable = false, updatable = false)
@@ -30,8 +29,7 @@ public class Expense {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    public Expense( String title, BigDecimal amount, Category category) {
-        this.title = title;
+    public Expense( BigDecimal amount, Category category) {
         this.amount = amount;
         this.category = category;
     }
