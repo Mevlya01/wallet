@@ -179,7 +179,6 @@
     <div class="card">
       <h2>Add Expense</h2>
       <div class="form-row">
-        <input id="expTitle" placeholder="Title"/>
         <input id="expAmount" type="number" step="0.01" placeholder="Amount"/>
         <select id="expCategory"><option value="">Select category</option></select>
         <button class="btn" onclick="createExpense()">Add Expense</button>
@@ -199,7 +198,7 @@
       </div>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>Title</th><th>Amount</th><th>Category</th><th>Actions</th></tr></thead>
+          <thead><tr><th>Amount</th><th>Category</th><th>Actions</th></tr></thead>
           <tbody id="expTable"></tbody>
         </table>
       </div>
@@ -236,7 +235,6 @@
   <div class="modal">
     <h3>Edit Expense</h3>
     <div style="display:flex; flex-direction:column; gap:.8rem;">
-      <input id="editExpTitle" placeholder="Title"/>
       <input id="editExpAmount" type="number" step="0.01" placeholder="Amount"/>
       <select id="editExpCategory"></select>
     </div>
@@ -299,7 +297,6 @@
     const filtered = filter ? expenses.filter(e => e.category?.name === filter) : expenses;
     document.getElementById('expTable').innerHTML = filtered.length
       ? filtered.map(e => `<tr>
-          <td>${e.title}</td>
           <td class="amount">$${parseFloat(e.amount).toFixed(2)}</td>
           <td><span class="cat-badge">${e.category?.name || '—'}</span></td>
           <td>
@@ -307,7 +304,7 @@
             <button class="btn-action del" onclick="deleteExpense(${e.id})">Delete</button>
           </td>
         </tr>`).join('')
-      : `<tr><td class="empty" colspan="4">No expenses found.</td></tr>`;
+      : `<tr><td class="empty" colspan="3">No expenses found.</td></tr>`;
   }
 
   async function fetchTotal() {
@@ -350,18 +347,16 @@
   }
 
   async function createExpense() {
-    const title = document.getElementById('expTitle').value.trim();
     const amount = document.getElementById('expAmount').value;
     const categoryName = document.getElementById('expCategory').value;
-    if (!title || !amount || !categoryName) return alert('Please fill in all fields.');
+    if (!amount || !categoryName) return alert('Please fill in all fields.');
     try {
       const r = await fetch(`${BASE}/expense`, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title, amount: parseFloat(amount), categoryName })
+        body: JSON.stringify({ amount: parseFloat(amount), categoryName })
       });
       if (!r.ok) throw new Error();
       expenses = await (await fetch(`${BASE}/expense`)).json();
-      document.getElementById('expTitle').value = '';
       document.getElementById('expAmount').value = '';
       document.getElementById('expCategory').value = '';
       renderExpenses();
@@ -415,7 +410,6 @@
     const e = expenses.find(x => x.id === id);
     if (!e) return;
     editingExpenseId = id;
-    document.getElementById('editExpTitle').value = e.title;
     document.getElementById('editExpAmount').value = e.amount;
     document.getElementById('editExpCategory').innerHTML =
       categories.map(c => `<option value="${c.name}" ${c.name === e.category?.name ? 'selected' : ''}>${c.name}</option>`).join('');
@@ -428,14 +422,13 @@
   }
 
   async function submitPatchExpense() {
-    const title = document.getElementById('editExpTitle').value.trim();
     const amount = document.getElementById('editExpAmount').value;
     const categoryName = document.getElementById('editExpCategory').value;
-    if (!title || !amount) return alert('Fill in all fields.');
+    if (!amount) return alert('Fill in all fields.');
     try {
       const r = await fetch(`${BASE}/expense/${editingExpenseId}`, {
         method: 'PATCH', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title, amount: parseFloat(amount), categoryName })
+        body: JSON.stringify({ amount: parseFloat(amount), categoryName })
       });
       if (!r.ok) throw new Error();
       expenses = await (await fetch(`${BASE}/expense`)).json();
