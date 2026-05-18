@@ -18,7 +18,8 @@ public class CategoryService {
     private final ExpenseRepository expenseRepository;
 
     public Category createCategory(CreateCategoryRequest request){
-        Category category = new Category(request.getName(), false);
+        Category category = new Category(request.getName(),
+                request.getType(), false);
         return categoryRepository.save(category);
     }
 
@@ -36,6 +37,7 @@ public class CategoryService {
         }
 
         category.setName(request.getName());
+        category.setType(request.getType());
         return categoryRepository.save(category);
     }
 

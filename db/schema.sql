@@ -4,7 +4,8 @@ USE wallet;
 CREATE TABLE categories (
                             id BIGINT AUTO_INCREMENT PRIMARY KEY,
                             name VARCHAR(100) NOT NULL UNIQUE,
-                            default_category BOOLEAN NOT NULL
+                            default_category BOOLEAN NOT NULL,
+                            type ENUM('EXPENSE', 'INCOME') NOT NULL
 );
 
 CREATE TABLE expenses (
