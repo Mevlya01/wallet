@@ -1,7 +1,6 @@
 package com.wallet.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,17 +8,26 @@ import lombok.Setter;
 import java.math.BigDecimal;
 import java.time.Instant;
 
-
+@Entity
+@Table(name = "expenses", indexes = {
+        @Index(name = "idx_category_id", columnList = "category_id")
+})
 @Setter
 @Getter
 @NoArgsConstructor
 public class Income {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private BigDecimal amount;
+
+    @Column(name = "creation_time", nullable = false, updatable = false)
     private Instant creationTime = Instant.now();
 
     @ManyToOne(optional = false)
+    @JoinColumn(name = "category_id")
     private Category category;
 
     public Income(BigDecimal amount, Category category){
