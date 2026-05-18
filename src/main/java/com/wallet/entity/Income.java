@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 import java.time.Instant;
 
 @Entity
-@Table(name = "expenses", indexes = {
+@Table(name = "income", indexes = {
         @Index(name = "idx_category_id", columnList = "category_id")
 })
 @Setter
