@@ -32,8 +32,8 @@ CREATE TABLE income (
 CREATE INDEX idx_income_category_id
     ON income(category_id);
 
-INSERT INTO categories (name, default_category)
+INSERT INTO categories (name, default_category, type)
 VALUES
-    ('Food', TRUE),
-    ('Fuel', TRUE),
-    ('Bills', TRUE);
+    ('Food', TRUE, 'EXPENSE'),
+    ('Fuel', TRUE, 'EXPENSE'),
+    ('Bills', TRUE, 'EXPENSE');
