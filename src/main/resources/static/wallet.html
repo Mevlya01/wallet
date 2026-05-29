@@ -117,6 +117,13 @@
       padding: .2rem .6rem; border-radius: 20px;
       font-size: .78rem; font-weight: 600;
     }
+    .type-badge {
+      padding: .2rem .6rem; border-radius: 20px;
+      font-size: .78rem; font-weight: 600;
+    }
+    .type-badge.expense { background: #ffebee; color: #c62828; }
+    .type-badge.income { background: #e3f2fd; color: #1565c0; }
+    .income-amt { color: #1565c0 !important; }
     .empty { text-align: center; color: #bbb; padding: 2rem !important; font-size: .9rem; }
 
     .btn-action {
@@ -208,7 +215,7 @@
       </div>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>Amount</th><th>Category</th><th>Actions</th></tr></thead>
+          <thead><tr><th>Type</th><th>Amount</th><th>Category</th><th>Actions</th></tr></thead>
           <tbody id="expTable"></tbody>
         </table>
       </div>
@@ -225,13 +232,17 @@
       <div id="addCatForm" style="display:none; margin-bottom:1.2rem; padding:1rem; background:#f9f9f9; border-radius:8px; border:1px solid #eee;">
         <div class="form-row">
           <input id="catName" placeholder="Category name"/>
+          <select id="catType">
+            <option value="EXPENSE">Expense</option>
+            <option value="INCOME">Income</option>
+          </select>
           <button class="btn" onclick="createCategory()">Add</button>
           <button class="btn secondary" onclick="toggleAddCategory()">Cancel</button>
         </div>
       </div>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>Name</th></tr></thead>
+          <thead><tr><th>Name</th><th>Type</th></tr></thead>
           <tbody id="catTable"></tbody>
         </table>
       </div>
@@ -269,7 +280,7 @@
 
 <script>
   const BASE = 'http://localhost:8080';
-  let expenses = [], categories = [];
+  let expenses = [], categories = [], incomes = [];
 
   function showSection(id, btn) {
     document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
@@ -281,6 +292,7 @@
   async function init() {
     try { categories = await (await fetch(`${BASE}/category`)).json(); } catch { categories = []; }
     try { expenses = await (await fetch(`${BASE}/expense`)).json(); } catch { expenses = []; }
+    try { incomes = await (await fetch(`${BASE}/income`)).json(); } catch { incomes = []; }
     renderCategorySelect();
     renderCategories();
     renderExpenses();
@@ -298,25 +310,37 @@
 
   function renderCategories() {
     document.getElementById('catTable').innerHTML = categories.length
-      ? categories.map(c => `<tr><td>${c.name}</td></tr>`).join('')
-      : `<tr><td class="empty">No categories yet.</td></tr>`;
+      ? categories.map(c => `<tr>
+          <td>${c.name}</td>
+          <td><span class="type-badge ${c.type === 'EXPENSE' ? 'expense' : 'income'}">${c.type || '—'}</span></td>
+        </tr>`).join('')
+      : `<tr><td class="empty" colspan="2">No categories yet.</td></tr>`;
   }
 
   function renderExpenses() {
     fetchTotal();
     fetchCategoryTotals();
     const filter = document.getElementById('filterCategory').value;
-    const filtered = filter ? expenses.filter(e => e.category?.name === filter) : expenses;
+
+    const allRows = [
+      ...expenses.map(e => ({ ...e, type: 'expense' })),
+      ...incomes.map(i => ({ ...i, type: 'income' }))
+    ].sort((a, b) => new Date(b.creationTime) - new Date(a.creationTime));
+
+    const filtered = filter ? allRows.filter(r => r.category?.name === filter) : allRows;
+
     document.getElementById('expTable').innerHTML = filtered.length
-      ? filtered.map(e => `<tr>
-          <td class="amount">$${parseFloat(e.amount).toFixed(2)}</td>
-          <td><span class="cat-badge">${e.category?.name || '—'}</span></td>
-          <td>
-            <button class="btn-action edit" onclick="openEditExpense(${e.id})">Edit</button>
-            <button class="btn-action del" onclick="deleteExpense(${e.id})">Delete</button>
-          </td>
+      ? filtered.map(r => `<tr>
+          <td><span class="type-badge ${r.type}">${r.type === 'expense' ? 'Expense' : 'Income'}</span></td>
+          <td class="amount ${r.type === 'income' ? 'income-amt' : ''}">${r.type === 'income' ? '+' : '-'}$${parseFloat(r.amount).toFixed(2)}</td>
+          <td><span class="cat-badge">${r.category?.name || '—'}</span></td>
+          <td>${r.type === 'expense'
+            ? `<button class="btn-action edit" onclick="openEditExpense(${r.id})">Edit</button>
+               <button class="btn-action del" onclick="deleteExpense(${r.id})">Delete</button>`
+            : '—'
+          }</td>
         </tr>`).join('')
-      : `<tr><td class="empty" colspan="3">No expenses found.</td></tr>`;
+      : `<tr><td class="empty" colspan="4">No transactions found.</td></tr>`;
   }
 
   async function fetchTotal() {
@@ -393,9 +417,10 @@
         body: JSON.stringify({ amount: parseFloat(amount), categoryName })
       });
       if (!r.ok) throw new Error();
+      incomes = await (await fetch(`${BASE}/income`)).json();
       document.getElementById('incAmount').value = '';
       document.getElementById('incCategory').value = '';
-      alert('Income added!');
+      renderExpenses();
     } catch { alert('Failed to add income.'); }
   }
 
@@ -407,11 +432,12 @@
 
   async function createCategory() {
     const name = document.getElementById('catName').value.trim();
+    const type = document.getElementById('catType').value;
     if (!name) return alert('Enter a category name.');
     try {
       const r = await fetch(`${BASE}/category`, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, defaultCategory: false })
+        body: JSON.stringify({ name, type, defaultCategory: false })
       });
       if (!r.ok) throw new Error();
       categories = await (await fetch(`${BASE}/category`)).json();
