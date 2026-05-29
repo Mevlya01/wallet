@@ -7,6 +7,8 @@ import com.wallet.repository.CategoryRepository;
 import com.wallet.repository.IncomeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -22,5 +24,9 @@ public class IncomeService {
         Income income = new Income(request.getAmount(), category);
 
         return  incomeRepository.save(income);
+    }
+
+    public List<Income> getAllIncomes(){
+       return incomeRepository.findAll();
     }
 }
