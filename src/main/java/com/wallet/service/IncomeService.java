@@ -29,4 +29,17 @@ public class IncomeService {
     public List<Income> getAllIncomes(){
        return incomeRepository.findAll();
     }
+
+    public Income updateIncome(Long id, CreateIncomeRequest request){
+       Income income = incomeRepository.findById(id).orElseThrow(
+               () -> new NoSuchElementException("Income record does not exist! " + id));
+
+       Category category = categoryRepository.findByName(request.getCategoryName()).
+               orElseThrow(() -> new NoSuchElementException("Category does not exist!"));
+
+       income.setAmount(request.getAmount());
+       income.setCategory(category);
+
+       return incomeRepository.save(income);
+    }
 }

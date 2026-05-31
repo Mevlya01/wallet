@@ -27,4 +27,13 @@ public class IncomeController {
         List<Income> allIncomes = incomeService.getAllIncomes();
         return ResponseEntity.ok(allIncomes);
     }
+
+    @PutMapping("{id}")
+    public ResponseEntity<Income> updateIncome(@PathVariable Long id,
+                                               @RequestBody CreateIncomeRequest request){
+
+        Income income = incomeService.updateIncome(id,request);
+        return ResponseEntity.ok(income);
+    }
+
 }
