@@ -32,8 +32,16 @@ public class IncomeController {
     public ResponseEntity<Income> updateIncome(@PathVariable Long id,
                                                @RequestBody CreateIncomeRequest request){
 
-        Income income = incomeService.updateIncome(id,request);
-        return ResponseEntity.ok(income);
+        Income updatedIncome = incomeService.updateIncome(id,request);
+        return ResponseEntity.ok(updatedIncome);
     }
 
+    @PatchMapping("{id}")
+    public ResponseEntity<Income> patchIncome(@PathVariable Long id,
+                                              @RequestBody CreateIncomeRequest request){
+        Income updatedIncome = incomeService.updateIncome(id,request);
+
+        return ResponseEntity.ok(updatedIncome);
+
+    }
 }
