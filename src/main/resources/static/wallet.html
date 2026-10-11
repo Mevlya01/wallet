@@ -323,8 +323,11 @@
   }
 
   function renderCategories() {
-    document.getElementById('catTable').innerHTML = categories.length
-      ? categories.map(c => `<tr>
+    const sortedCategories = [...categories].sort((a, b) =>
+      Number(Boolean(a.defaultCategory)) - Number(Boolean(b.defaultCategory))
+    );
+    document.getElementById('catTable').innerHTML = sortedCategories.length
+      ? sortedCategories.map(c => `<tr>
           <td>${c.name}</td>
           <td><span class="type-badge ${c.type === 'EXPENSE' ? 'expense' : 'income'}">${c.type || '—'}</span></td>
           <td>${c.defaultCategory ? '' : `<button class="btn-action del" onclick="deleteCategory('${encodeURIComponent(c.name).replace(/'/g, '%27')}')">Delete</button>`}</td>
