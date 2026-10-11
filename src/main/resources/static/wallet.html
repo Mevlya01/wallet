@@ -351,7 +351,7 @@
           <td>${r.type === 'expense'
             ? `<button class="btn-action edit" onclick="openEditExpense(${r.id})">Edit</button>
                <button class="btn-action del" onclick="deleteExpense(${r.id})">Delete</button>`
-            : `<button class="btn-action edit" onclick="openEditIncome(${r.id})">Edit</button>`
+            : `<button type="button" class="btn-action edit" aria-label="Edit income transaction" onclick="openEditIncome(${r.id})">Edit</button>`
           }</td>
         </tr>`).join('')
       : `<tr><td class="empty" colspan="4">No transactions found.</td></tr>`;
@@ -488,7 +488,8 @@
     editingIncomeId = id;
     document.getElementById('editIncAmount').value = i.amount;
     document.getElementById('editIncCategory').innerHTML =
-      categories.map(c => `<option value="${c.name}" ${c.name === i.category?.name ? 'selected' : ''}>${c.name}</option>`).join('');
+      categories.filter(c => c.type === 'INCOME')
+        .map(c => `<option value="${c.name}" ${c.name === i.category?.name ? 'selected' : ''}>${c.name}</option>`).join('');
     document.getElementById('editIncModal').classList.add('open');
   }
 
@@ -500,7 +501,7 @@
   async function submitPatchIncome() {
     const amount = document.getElementById('editIncAmount').value;
     const categoryName = document.getElementById('editIncCategory').value;
-    if (!amount) return alert('Fill in all fields.');
+    if (!amount || !categoryName) return alert('Fill in all fields.');
     try {
       const r = await fetch(`${BASE}/income/${editingIncomeId}`, {
         method: 'PATCH', headers: { 'Content-Type': 'application/json' },
