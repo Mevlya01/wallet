@@ -241,7 +241,7 @@
       </div>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>Name</th><th>Type</th></tr></thead>
+          <thead><tr><th>Name</th><th>Type</th><th>Actions</th></tr></thead>
           <tbody id="catTable"></tbody>
         </table>
       </div>
@@ -327,8 +327,27 @@
       ? categories.map(c => `<tr>
           <td>${c.name}</td>
           <td><span class="type-badge ${c.type === 'EXPENSE' ? 'expense' : 'income'}">${c.type || '—'}</span></td>
+          <td>${c.defaultCategory ? '' : `<button class="btn-action del" onclick="deleteCategory('${encodeURIComponent(c.name).replace(/'/g, '%27')}')">Delete</button>`}</td>
         </tr>`).join('')
-      : `<tr><td class="empty" colspan="2">No categories yet.</td></tr>`;
+      : `<tr><td class="empty" colspan="3">No categories yet.</td></tr>`;
+  }
+
+  async function deleteCategory(encodedName) {
+    const name = decodeURIComponent(encodedName);
+    if (!confirm(`Delete category "${name}"?`)) return;
+    try {
+      const response = await fetch(`${BASE}/category/${encodeURIComponent(name)}`, { method: 'DELETE' });
+      if (!response.ok) {
+        const message = await response.text();
+        throw new Error(message || 'Failed to delete category.');
+      }
+      categories = await (await fetch(`${BASE}/category`)).json();
+      renderCategorySelect();
+      renderCategories();
+      renderExpenses();
+    } catch (error) {
+      alert(error.message || 'Failed to delete category.');
+    }
   }
 
   function renderExpenses() {
